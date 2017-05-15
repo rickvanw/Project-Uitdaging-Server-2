@@ -7,14 +7,12 @@ var router = express.Router();
 
 module.exports = router;
 
-var fs = require('fs');
-
 var connection = require('./connection.js');
 var config = require('./config.js');
 var utils = require('./utils.js');
 
 /**
- * GET all complaints in array
+ *
  */
 router.get('', function (req, res) {
 
