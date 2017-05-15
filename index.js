@@ -12,7 +12,7 @@ var bodyparser = require('body-parser');
 
 var app = express();
 
-var publicUrls = ["/complaints", "/user/password-reset-request", "/user/confirm-password-reset"];
+var publicUrls = ["/complaints", "user/add", "/user", "/user/change", "/user/password-reset-request", "/user/confirm-password-reset"];
 
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -88,5 +88,5 @@ app.use('/complaints', complaint);
 // var treatment = require("./resources/treatment.js");
 // app.use('/treatment', treatment);
 //
-// var user = require("./resources/user.js");
-// app.use('/user', user);
+var user = require("./resources/user.js");
+app.use('/user', user);
