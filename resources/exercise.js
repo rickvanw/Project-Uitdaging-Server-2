@@ -13,8 +13,6 @@ var connection = require('./connection.js');
 var config = require('./config.js');
 var utils = require('./utils.js');
 
-
-
 app.get('/exercise', function (request, response){
     // Get token
     var authToken = request.header('Authorization');
