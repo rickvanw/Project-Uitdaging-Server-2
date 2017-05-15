@@ -35,3 +35,17 @@ router.post('/add', function (req, res) {
         res.status(201).send();
     })
 });
+
+router.get('', function (req, res) {
+    var module_id = req.params.module_id;
+
+    var query = "SELECT * FROM complaint";
+    connection.query(query, function (err, result) {
+        if (err){
+            res.status(400).json([]);
+            return;
+        }
+        res.status(200).json(result);
+    });
+
+});
