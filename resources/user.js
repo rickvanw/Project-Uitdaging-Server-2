@@ -58,7 +58,7 @@ router.put('/change', function (req, res) {
     var user_id = 1;
 
     //var query = 'insert into complaint(name) values()';
-    var query = 'UPDATE user SET email= "'+email+'", password= "'+password+'", first_name= "'+first_name+'", last_name= "'+email+'" WHERE user_id='+user_id+'';
+    var query = 'UPDATE user SET email= "'+email+'", password= "'+password+'", first_name= "'+first_name+'", last_name= "'+last_name+'" WHERE user_id='+user_id+'';
 
     console.log(query);
 

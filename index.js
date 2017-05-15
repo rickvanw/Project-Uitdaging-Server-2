@@ -14,13 +14,6 @@ var app = express();
 
 var publicUrls = ["/complaints", "user/add", "/user", "/user/change", "/user/password-reset-request", "/user/confirm-password-reset"];
 
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'actions'
-});
-
 /*
  * Fixing cross domain problems
  */
