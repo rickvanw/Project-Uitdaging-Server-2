@@ -4,6 +4,7 @@ var router = express.Router();
 
 module.exports = router;
 
+var jwt = require('jsonwebtoken');
 var connection = require('./connection.js');
 var config = require('./config.js');
 var utils = require('./utils.js');
@@ -13,8 +14,7 @@ var utils = require('./utils.js');
  */
 router.get('', function (req, res) {
 
-    //TODO logged-in user_id
-    var user_id = 1;
+    var user_id = req.decoded.user_id;
 
     var query = "SELECT role_id, email, first_name, last_name FROM user WHERE user_id = " + user_id;
     connection.query(query, function (err, result) {
@@ -54,10 +54,8 @@ router.put('/change', function (req, res) {
     var first_name = req.body.first_name;
     var last_name = req.body.last_name;
 
-    // TODO current logged-in user_id
-    var user_id = 1;
+    var user_id = req.decoded.user_id;
 
-    //var query = 'insert into complaint(name) values()';
     var query = 'UPDATE user SET email= "'+email+'", password= "'+password+'", first_name= "'+first_name+'", last_name= "'+last_name+'" WHERE user_id='+user_id+'';
 
     console.log(query);
@@ -76,27 +74,24 @@ router.post('/login', function (req, res) {
     var email = req.body.email;
     var password = req.body.password;
 
-    //var query = 'insert into complaint(name) values()';
-    var query = 'SELECT password FROM user WHERE email = "' + email + '"';
-
-    console.log(query);
-
-    connection.query(query, function (err, result) {
+    connection.query('SELECT user_id, role_id, password FROM user WHERE email = "' + email + '"', function (err, result) {
         if (err) {
-            console.log(err.message);
-            return;
+            utils.error(500, "Something went wrong server side, please try again later", res);
+            throw err;
         }
-        var str = JSON.stringify(result);
 
-        console.log("RESULT: "+ str);
-
-        if(password==result){
-
-            console.log("Logged in");
-            res.status(201).send();
-        }else{
-            console.log("NOT logged in");
-            res.status(401).send();
+        if (result[0] === undefined) {
+            utils.error(401, 'User with given username not found', res);
         }
-    })
+        else if(result[0].password === password) {
+            // Check if password is correct
+            res.status(200);
+            var token = jwt.sign({email: email, user_id: result[0].user_id, role_id: result[0].role_id}, config.secretKey, {expiresIn: config.tokenExpiresIn});
+            res.send({token: token});
+        }
+        else {
+            // Incorrect password
+            utils.error(401, 'Incorrect password', res);
+        }
+    });
 });
