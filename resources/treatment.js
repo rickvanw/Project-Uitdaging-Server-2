@@ -75,3 +75,16 @@ router.put('/exercises-done', function (req, res) {
         res.status(200).send(done);
     });
 });
+
+router.get('/startdate', function (req, res) {
+    var query = 'SELECT start_date FROM treatment ORDER BY start_date ASC';
+
+    connection.query(query, function (err, result) {
+        if (err){
+            res.status(404).send("Niet gevonden");
+            return;
+        }
+
+        res.status(200).json(result);
+    });
+});
